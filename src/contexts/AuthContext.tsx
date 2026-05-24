@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@core/integrations/supabase/client";
 import type { Tables, Enums } from "@core/integrations/supabase/types";
+import { logAcesso } from "@core/lib/activityLog";
 
 type PdiProfile = Tables<"pdi_profiles">;
 type PdiRole = Enums<"pdi_role">;
@@ -48,6 +49,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setProfile(null);
           setRoles([]);
         }
+
+        if (event === "SIGNED_IN") logAcesso("login");
         setIsLoading(false);
       }
     );
@@ -68,6 +71,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const isAdmin = hasRole("admin_geral");
 
   const signOut = async () => {
+    logAcesso("logout");
     await supabase.auth.signOut();
     setProfile(null);
     setRoles([]);

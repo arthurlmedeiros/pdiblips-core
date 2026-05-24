@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@core/contexts/AuthContext";
 import ProtectedRoute from "@layout/components/ProtectedRoute";
+import ErrorBoundary from "@core/components/ErrorBoundary";
 import Landing from "@landing/pages/Landing";
 import Login from "@/pages/Login";
 import AppLayout from "@layout/layouts/AppLayout";
@@ -16,6 +17,7 @@ import Score from "@testes/pages/Score";
 import Salarios from "@salarios/pages/Salarios";
 import Beneficios from "@beneficios/pages/Beneficios";
 import Usuarios from "@usuarios/pages/Usuarios";
+import Logs from "@usuarios/pages/Logs";
 import Customizacao from "@customizacao/pages/Customizacao";
 import NotFound from "@landing/pages/NotFound";
 
@@ -35,7 +37,9 @@ const App = () => (
               path="/app"
               element={
                 <ProtectedRoute>
-                  <AppLayout />
+                  <ErrorBoundary>
+                    <AppLayout />
+                  </ErrorBoundary>
                 </ProtectedRoute>
               }
             >
@@ -47,6 +51,7 @@ const App = () => (
               <Route path="salarios" element={<Salarios />} />
               <Route path="beneficios" element={<Beneficios />} />
               <Route path="usuarios" element={<Usuarios />} />
+              <Route path="logs" element={<Logs />} />
               <Route path="customizacao" element={<Customizacao />} />
             </Route>
             <Route path="*" element={<NotFound />} />

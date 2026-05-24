@@ -18,6 +18,8 @@ Módulo de infraestrutura compartilhada da plataforma PDI Blips. Contém o clien
 | `src/hooks/use-mobile.tsx` | Hook utilitário para detectar viewport mobile (`useIsMobile`). |
 | `src/hooks/use-toast.ts` | Hook wrapper para `sonner` — usado em toda a aplicação para toasts. |
 | `src/lib/utils.ts` | Função `cn()` (classnames + tailwind-merge) e outros utilitários globais. |
+| `src/lib/activityLog.ts` | Logging de acesso/erro do frontend → grava em `pdi_logs` via RPC `pdi_registrar_log`. Expõe `logAcesso` e `logErro` (fail-safe). |
+| `src/components/ErrorBoundary.tsx` | ErrorBoundary global — captura erros de render, registra via `logErro` e mostra fallback PT-BR. Envolve `/app` em `App.tsx`. |
 
 ---
 
@@ -34,6 +36,10 @@ Módulo de infraestrutura compartilhada da plataforma PDI Blips. Contém o clien
 - Funções disponíveis: `signIn(email, password)`, `signOut()`
 - Roles são carregadas da tabela `pdi_roles` após autenticação
 - Role padrão no signup: `gerente`
+- **Logging de acesso**: `logAcesso('login')` no evento `SIGNED_IN`; `logAcesso('logout')` no `signOut()` (via `@core/lib/activityLog`)
+
+### Logging global de erros (`main.tsx`)
+`main.tsx` registra handlers `window.onerror` e `unhandledrejection` → `logErro`, além de montar o `<App />`. Erros de render são capturados pelo `ErrorBoundary` que envolve `/app`.
 
 ### React Router DOM v6
 - Todas as rotas definidas em `App.tsx`
